@@ -19,6 +19,7 @@ build.bat
 ```
 
 - 埋め込むバージョンは `build.bat` 先頭の `SET VERSION=...` で指定します（`wslc-compose --version` で確認できます）
+- `icon\icon.png` のアイコンとバージョン情報を exe に埋め込みます（[go-winres](https://github.com/tc-hib/go-winres) で `rsrc_windows_amd64.syso` を生成）
 - Go が PATH にない場合は `C:\Program Files\Go\bin` を使います
 
 バッチを使わずにビルドする場合:
