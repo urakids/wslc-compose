@@ -79,6 +79,32 @@ wslc-compose down -v
 | `images [SERVICE...]` | |
 | `version` | |
 
+## ネットワークモードの切り替え（tools\wslc-netmode.ps1）
+
+セキュリティソフトの SSL/TLS 検査（Norton など）で、wslc の pull やビルド中の通信が証明書エラーになる場合は、wslc のネットワークモードを `nat` に切り替えると回避できます。
+
+| モード | 通信経路 | `host.wslc.internal` |
+|---|---|---|
+| `internal` | wslc の既定（consomme）。Windows のプロセスが中継するため SSL/TLS 検査を受ける | 使える |
+| `nat` | Windows の NAT を通る。SSL/TLS 検査を受けない | 使えない |
+
+```bash
+powershell -File tools\wslc-netmode.ps1
+```
+
+```bash
+powershell -File tools\wslc-netmode.ps1 nat
+```
+
+```bash
+powershell -File tools\wslc-netmode.ps1 internal
+```
+
+- 現在のモードと切り替え先を表示し、確認（y/N）してから切り替えます。引数なしの場合は現在と反対のモードへ切り替えます（`-Yes` で確認を省略）
+- 切り替えるとセッションが再起動され、動作中のコンテナは停止します（確認時に停止するコンテナを一覧表示）
+- wslc の設定ファイル（`settings.yaml`）の `session.networkingMode` を書き換えます（書き換え前の内容は `settings.yaml.bak` に保存）
+- `session.networkingMode` は wslc の公式ドキュメントに記載のない設定です（wslc 3.0.1 で動作確認）
+
 ## 対応している compose の機能
 
 - 変数展開: `$VAR`, `${VAR}`, `${VAR:-def}`, `${VAR-def}`, `${VAR:?err}`, `${VAR?err}`, `${VAR:+alt}`, `$$`、`.env` 読み込み
